@@ -7,9 +7,7 @@ import org.springframework.beans.BeanUtils;
 import java.math.BigDecimal;
 
 /**
- * 景点对外视图 —— 不直接把 entity 丢给前端。
- *
- * <p>列表查询只填非 content 的字段（{@code content} 为 TEXT，列表不查它），详情才会带上 content。
+ * 景点对外视图：列表不带 content，详情才带。
  */
 @Data
 public class SpotVO {
@@ -17,18 +15,21 @@ public class SpotVO {
     private Long id;
     private String name;
     private String summary;
-    /** 详细介绍：列表接口为 null，详情接口才有 */
     private String content;
     private String coverImg;
     private BigDecimal longitude;
     private BigDecimal latitude;
     private String openTime;
-    /** 人均价格，单位：分 */
+
+    /** 单位：分 */
     private Integer avgPrice;
+
     private BigDecimal score;
     private Integer soldCount;
     private Integer recommendOrder;
     private Integer walkMinutes;
+
+    /** 1 景点 0 展馆 */
     private Integer type;
 
     public static SpotVO of(Spot spot) {

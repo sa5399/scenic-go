@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * 景点 / 展馆（type：1 景点，0 展馆）。
+ * 景点 / 展馆。
  */
 @Data
 @TableName("spot")
@@ -20,28 +20,27 @@ public class Spot {
 
     private String name;
 
-    /** 一句话简介，列表页用 */
+    /** 列表页展示 */
     private String summary;
 
-    /** 详细介绍，详情页用（TEXT，列表查询不要带出来） */
+    /** TEXT，列表查询不带出来 */
     private String content;
 
     private String coverImg;
 
-    /** 经度（Redis GEO 用） */
+    /** 经纬度，Redis GEO 用 */
     private BigDecimal longitude;
 
-    /** 纬度 */
     private BigDecimal latitude;
 
     private String openTime;
 
-    /** 人均价格，单位：分 */
+    /** 单位：分 */
     private Integer avgPrice;
 
     private BigDecimal score;
 
-    /** 累计预约数，冗余字段，用于排序 */
+    /** 冗余字段，列表排序用 */
     private Integer soldCount;
 
     /** 推荐路线顺序，0 表示不进主路线 */

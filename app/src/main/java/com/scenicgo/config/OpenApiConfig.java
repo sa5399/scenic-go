@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * 接口文档配置（springdoc，访问 /swagger-ui.html）。
+ * 接口文档，/swagger-ui.html。
  */
 @Configuration
 public class OpenApiConfig {

@@ -4,9 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.scenicgo.spot.entity.Spot;
 
 /**
- * 景点 Mapper。
- *
- * <p>无需 {@code @Mapper} 注解：启动类上的 {@code @MapperScan("com.scenicgo.**.mapper")} 已覆盖本包。
+ * 启动类的 @MapperScan 已覆盖本包，接口上不用加 @Mapper。
  */
 public interface SpotMapper extends BaseMapper<Spot> {
 }
