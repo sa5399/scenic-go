@@ -11,9 +11,11 @@ import com.scenicgo.spot.entity.Exhibition;
 import com.scenicgo.spot.entity.Spot;
 import com.scenicgo.spot.mapper.ExhibitionMapper;
 import com.scenicgo.spot.mapper.SpotMapper;
+import com.scenicgo.spot.mapper.TagMapper;
 import com.scenicgo.spot.service.SpotService;
 import com.scenicgo.spot.vo.ExhibitionVO;
 import com.scenicgo.spot.vo.SpotVO;
+import com.scenicgo.spot.vo.TagVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,8 @@ public class SpotServiceImpl implements SpotService {
     private final SpotMapper spotMapper;
 
     private final ExhibitionMapper exhibitionMapper;
+
+    private final TagMapper tagMapper;
 
     @Override
     public PageResult<SpotVO> listSpots(SpotQuery query) {
@@ -48,7 +52,9 @@ public class SpotServiceImpl implements SpotService {
         if (spot == null || !SpotStatusEnum.ON_SALE.getCode().equals(spot.getStatus())) {
             throw new BizException("景点不存在或已下架");
         }
-        return SpotVO.of(spot);
+        SpotVO vo = SpotVO.of(spot);
+        vo.setTags(tagMapper.selectBySpotId(id).stream().map(TagVO::of).toList());
+        return vo;
     }
 
     @Override

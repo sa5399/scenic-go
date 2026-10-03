@@ -5,9 +5,10 @@ import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
- * 景点对外视图：列表不带 content，详情才带。
+ * 景点对外视图：列表不带 content 与 tags，详情才带。
  */
 @Data
 public class SpotVO {
@@ -31,6 +32,9 @@ public class SpotVO {
 
     /** 1 景点 0 展馆 */
     private Integer type;
+
+    /** 景点挂的标签，只有详情接口会填 */
+    private List<TagVO> tags;
 
     public static SpotVO of(Spot spot) {
         SpotVO vo = new SpotVO();
