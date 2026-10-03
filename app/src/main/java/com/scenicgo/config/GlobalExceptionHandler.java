@@ -5,6 +5,7 @@ import com.scenicgo.common.result.Result;
 import com.scenicgo.common.result.ResultCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -41,6 +42,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public Result<Void> handleException(Exception e) {
+        // Spring 自己的 HTTP 异常（路径不存在 404、方法不支持 405 等）实现的是 ErrorResponse 接口，
+        // 并不是 ErrorResponseException 的子类，只能按接口判断，否则会一律变成 500
+        if (e instanceof ErrorResponse errorResponse) {
+            int code = errorResponse.getStatusCode().value();
+            log.warn("请求不合法 code={} msg={}", code, e.getMessage());
+            return code == ResultCode.NOT_FOUND.getCode()
+                    ? Result.fail(ResultCode.NOT_FOUND)
+                    : Result.fail(code, "请求不合法");
+        }
         log.error("未处理异常", e);
         return Result.fail(ResultCode.FAIL);
     }

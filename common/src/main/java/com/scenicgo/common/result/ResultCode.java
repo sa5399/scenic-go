@@ -10,6 +10,7 @@ public enum ResultCode {
 
     SUCCESS(200, "success"),
     BAD_REQUEST(400, "参数不合法"),
+    NOT_FOUND(404, "资源不存在"),
     FAIL(500, "服务器开小差了，请稍后再试");
 
     private final int code;

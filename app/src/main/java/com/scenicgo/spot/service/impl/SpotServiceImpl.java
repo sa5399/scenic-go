@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scenicgo.common.exception.BizException;
 import com.scenicgo.common.result.PageResult;
+import com.scenicgo.common.result.ResultCode;
 import com.scenicgo.spot.constant.SpotStatusEnum;
 import com.scenicgo.spot.dto.SpotQuery;
 import com.scenicgo.spot.entity.Exhibition;
@@ -50,7 +51,7 @@ public class SpotServiceImpl implements SpotService {
     public SpotVO getSpot(Long id) {
         Spot spot = spotMapper.selectById(id);
         if (spot == null || !SpotStatusEnum.ON_SALE.getCode().equals(spot.getStatus())) {
-            throw new BizException("景点不存在或已下架");
+            throw new BizException(ResultCode.NOT_FOUND, "景点不存在或已下架");
         }
         SpotVO vo = SpotVO.of(spot);
         vo.setTags(tagMapper.selectBySpotId(id).stream().map(TagVO::of).toList());
