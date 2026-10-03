@@ -1,0 +1,15 @@
+# 构建产物
+target/
+*.class
+
+# IDEA
+.idea/
+*.iml
+
+# 日志
+*.log
+logs/
+
+# 系统
+.DS_Store
+Thumbs.db
