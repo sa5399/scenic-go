@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scenicgo.spot.mapper.SpotMapper">
+
+    <select id="selectSpotPage" resultType="com.scenicgo.spot.entity.Spot">
+        SELECT s.id, s.name, s.summary, s.cover_img, s.longitude, s.latitude, s.open_time,
+               s.avg_price, s.score, s.sold_count, s.recommend_order, s.walk_minutes, s.type
+        FROM spot s
+        <if test="tagIds != null and tagIds.size() > 0">
+            JOIN spot_tag st ON st.spot_id = s.id
+        </if>
+        WHERE s.status = 1
+        <if test="type != null">
+            AND s.type = #{type}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND (s.name LIKE CONCAT('%', #{keyword}, '%') OR s.summary LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="tagIds != null and tagIds.size() > 0">
+            AND st.tag_id IN
+            <foreach collection="tagIds" item="tagId" open="(" separator="," close=")">#{tagId}</foreach>
+            GROUP BY s.id
+            HAVING COUNT(DISTINCT st.tag_id) = #{tagCount}
+        </if>
+        ORDER BY s.sold_count DESC, s.score DESC
+    </select>
+</mapper>

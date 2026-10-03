@@ -1,6 +1,7 @@
 package com.scenicgo.spot.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scenicgo.common.exception.BizException;
 import com.scenicgo.common.result.PageResult;
@@ -15,7 +16,6 @@ import com.scenicgo.spot.vo.ExhibitionVO;
 import com.scenicgo.spot.vo.SpotVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -32,22 +32,14 @@ public class SpotServiceImpl implements SpotService {
 
     @Override
     public PageResult<SpotVO> listSpots(SpotQuery query) {
-        LambdaQueryWrapper<Spot> wrapper = new LambdaQueryWrapper<Spot>()
-                .eq(Spot::getStatus, SpotStatusEnum.ON_SALE.getCode())
-                .eq(query.getType() != null, Spot::getType, query.getType())
-                .and(StringUtils.hasText(query.getKeyword()),
-                        w -> w.like(Spot::getName, query.getKeyword())
-                                .or().like(Spot::getSummary, query.getKeyword()))
-                .orderByDesc(Spot::getSoldCount)
-                .orderByDesc(Spot::getScore)
-                // content 是 TEXT，列表不带
-                .select(Spot::getId, Spot::getName, Spot::getSummary, Spot::getCoverImg,
-                        Spot::getLongitude, Spot::getLatitude, Spot::getOpenTime,
-                        Spot::getAvgPrice, Spot::getScore, Spot::getSoldCount,
-                        Spot::getRecommendOrder, Spot::getWalkMinutes, Spot::getType);
-
-        Page<Spot> result = spotMapper.selectPage(Page.of(query.getCurrent(), query.getSize()), wrapper);
-        return PageResult.of(result.convert(SpotVO::of));
+        List<Long> tagIds = query.getTagIds();
+        IPage<Spot> page = spotMapper.selectSpotPage(
+                Page.of(query.getCurrent(), query.getSize()),
+                query.getKeyword(),
+                query.getType(),
+                tagIds,
+                tagIds == null ? 0 : tagIds.size());
+        return PageResult.of(page.convert(SpotVO::of));
     }
 
     @Override
