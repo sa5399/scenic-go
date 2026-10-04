@@ -47,6 +47,11 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         </dependency>
+        <!-- 只用 BCrypt 密码哈希，不引入 Spring Security 的过滤器链 -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+        </dependency>
 
         <!-- AI：暂时注释。要接 RAG 时取消注释，并启用 ai 包 -->
         <!--
