@@ -17,11 +17,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
     /**
      * 免登录名单。
      *
-     * <p>登出也在这里：它只是删 token，没有 token 时什么都不用做，
-     * 让"token 已失效还想登出"的客户端也能拿到成功（幂等），不然前端会卡在登不出去。
+     * <p>登出**不**在这里：登出必须带有效 token，否则删不掉任何东西。
+     * 如果放行，没带 token 的登出会返回成功却什么都没删（静默失败，极难排查）。
+     * token 已过期时前端会收到 401，按约定清掉本地登录态即可。
      */
     private static final String[] WHITE_LIST = {
-            "/auth/register", "/auth/login", "/auth/logout",
+            "/auth/register", "/auth/login",
             "/spots", "/spots/**",
             "/tags", "/tags/**",
             "/facilities", "/facilities/**",
