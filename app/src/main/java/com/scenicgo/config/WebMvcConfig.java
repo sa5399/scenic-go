@@ -14,9 +14,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    /** 免登录：注册登录、景点/标签/设施的读接口、接口文档 */
+    /**
+     * 免登录名单。
+     *
+     * <p>登出也在这里：它只是删 token，没有 token 时什么都不用做，
+     * 让"token 已失效还想登出"的客户端也能拿到成功（幂等），不然前端会卡在登不出去。
+     */
     private static final String[] WHITE_LIST = {
-            "/auth/register", "/auth/login",
+            "/auth/register", "/auth/login", "/auth/logout",
             "/spots", "/spots/**",
             "/tags", "/tags/**",
             "/facilities", "/facilities/**",
