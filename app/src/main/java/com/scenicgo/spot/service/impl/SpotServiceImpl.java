@@ -13,6 +13,7 @@ import com.scenicgo.spot.entity.Spot;
 import com.scenicgo.spot.mapper.ExhibitionMapper;
 import com.scenicgo.spot.mapper.SpotMapper;
 import com.scenicgo.spot.mapper.TagMapper;
+import com.scenicgo.spot.service.SpotCacheService;
 import com.scenicgo.spot.service.SpotService;
 import com.scenicgo.spot.vo.ExhibitionVO;
 import com.scenicgo.spot.vo.SpotVO;
@@ -35,6 +36,8 @@ public class SpotServiceImpl implements SpotService {
 
     private final TagMapper tagMapper;
 
+    private final SpotCacheService spotCacheService;
+
     @Override
     public PageResult<SpotVO> listSpots(SpotQuery query) {
         List<Long> tagIds = query.getTagIds();
@@ -49,7 +52,7 @@ public class SpotServiceImpl implements SpotService {
 
     @Override
     public SpotVO getSpot(Long id) {
-        Spot spot = spotMapper.selectById(id);
+        Spot spot = spotCacheService.getSpot(id);
         if (spot == null || !SpotStatusEnum.ON_SALE.getCode().equals(spot.getStatus())) {
             throw new BizException(ResultCode.NOT_FOUND, "景点不存在或已下架");
         }
