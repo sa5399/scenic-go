@@ -6,6 +6,7 @@
 --       下单量全部遵守 sys_ticket_type.limit_per_slot；核销码由订单号派生，
 --       天然唯一（配合 reserve.uk_checkin_code）；最后按订单回填 sold_stock，
 --       保证 DB 层的库存与订单一致
+--       口径：待支付也占库存（下单即占用，取消/超时回补），所以对账含 status = 0
 -- =====================================================================
 
 SET NAMES utf8mb4;
@@ -67,12 +68,13 @@ FROM reserve r
 WHERE r.status = 2;
 
 -- ---------------------------------------------------------------------
--- 库存对账：sold_stock 回填为「有效订单（已预约 + 已核销）的票数合计」
+-- 库存对账：sold_stock 回填为「占用中订单（待支付 + 已预约 + 已核销）的票数合计」
+--   待支付那 15 分钟也占着票，Redis 与 DB 才在任何时刻都相等
 -- ---------------------------------------------------------------------
 UPDATE booking_slot bs
     JOIN (SELECT slot_id, SUM(quantity) AS q
           FROM reserve
-          WHERE status IN (1, 2)
+          WHERE status IN (0, 1, 2)
           GROUP BY slot_id) r ON r.slot_id = bs.id
 SET bs.sold_stock = r.q;
 
@@ -84,4 +86,4 @@ SELECT '核销流水条数', '', COUNT(*) FROM checkin_log
 UNION ALL
 SELECT '库存已售合计(booking_slot)', '', SUM(sold_stock) FROM booking_slot
 UNION ALL
-SELECT '有效订单票数(reserve)', '', IFNULL(SUM(quantity), 0) FROM reserve WHERE status IN (1, 2);
+SELECT '占用中票数(reserve)', '', IFNULL(SUM(quantity), 0) FROM reserve WHERE status IN (0, 1, 2);

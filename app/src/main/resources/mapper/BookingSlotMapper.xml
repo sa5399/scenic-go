@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scenicgo.reserve.mapper.BookingSlotMapper">
+
+    <select id="selectSlotList" resultType="com.scenicgo.reserve.vo.SlotVO">
+        SELECT bs.id AS slot_id, bs.slot_start, bs.slot_end, bs.ticket_type,
+               tt.name AS ticket_name, bs.price,
+               (bs.total_stock - bs.sold_stock) AS remaining,
+               tt.limit_per_slot
+        FROM booking_slot bs
+                 JOIN sys_ticket_type tt ON tt.code = bs.ticket_type
+        WHERE bs.spot_id = #{spotId}
+          AND bs.slot_date = #{slotDate}
+          AND bs.status = 1
+        ORDER BY bs.slot_start, bs.ticket_type
+    </select>
+
+    <select id="selectPreheatSlots" resultType="com.scenicgo.reserve.entity.BookingSlot">
+        SELECT id, total_stock, sold_stock
+        FROM booking_slot
+        WHERE slot_date &gt;= #{today}
+          AND status = 1
+    </select>
+
+    <update id="increaseSoldStock">
+        UPDATE booking_slot
+        SET sold_stock = sold_stock + #{quantity}
+        WHERE id = #{slotId}
+          AND status = 1
+          AND sold_stock + #{quantity} &lt;= total_stock
+    </update>
+</mapper>

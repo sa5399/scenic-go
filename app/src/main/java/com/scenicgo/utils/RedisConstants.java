@@ -16,4 +16,10 @@ public class RedisConstants {
     public static final Long CACHE_NULL_TTL_MINUTES = 2L;
     /** 热点 key 重建用的锁 */
     public static final String LOCK_SPOT_KEY = "lock:spot:";
+
+    /** 时段库存，value 是剩余可售张数；不设 TTL，启动时按 DB 重算 */
+    public static final String SLOT_STOCK_KEY = "slot:stock:";
+
+    /** 库存 key 缺失时重建用 */
+    public static final String LOCK_SLOT_KEY = "lock:slot:";
 }
