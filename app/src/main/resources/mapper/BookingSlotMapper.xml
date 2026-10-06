@@ -29,4 +29,11 @@
           AND status = 1
           AND sold_stock + #{quantity} &lt;= total_stock
     </update>
+
+    <update id="decreaseSoldStock">
+        UPDATE booking_slot
+        SET sold_stock = sold_stock - #{quantity}
+        WHERE id = #{slotId}
+          AND sold_stock &gt;= #{quantity}
+    </update>
 </mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scenicgo.reserve.mapper.ReserveMapper">
+
+    <select id="selectReservePage" resultType="com.scenicgo.reserve.vo.ReserveVO">
+        SELECT r.order_no, s.name AS spot_name, r.slot_date, r.slot_start, r.slot_end,
+               r.quantity, r.total_amount, r.status, r.create_time
+        FROM reserve r
+                 JOIN spot s ON s.id = r.spot_id
+        WHERE r.user_id = #{userId}
+        <if test="status != null">
+            AND r.status = #{status}
+        </if>
+        ORDER BY r.create_time DESC, r.id DESC
+    </select>
+
+    <select id="selectDetailByOrderNo" resultType="com.scenicgo.reserve.vo.ReserveVO">
+        SELECT r.order_no, s.name AS spot_name, r.slot_date, r.slot_start, r.slot_end,
+               r.quantity, r.total_amount, r.status, r.create_time,
+               r.checkin_code, r.pay_time, r.checkin_time, r.cancel_time
+        FROM reserve r
+                 JOIN spot s ON s.id = r.spot_id
+        WHERE r.order_no = #{orderNo}
+    </select>
+
+    <select id="selectExpiredOrders" resultType="com.scenicgo.reserve.entity.Reserve">
+        SELECT id, order_no, slot_id, quantity
+        FROM reserve
+        WHERE status = 0
+          AND create_time &lt; #{deadline}
+        LIMIT #{limit}
+    </select>
+</mapper>

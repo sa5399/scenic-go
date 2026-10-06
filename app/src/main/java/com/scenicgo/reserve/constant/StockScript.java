@@ -34,10 +34,10 @@ public class StockScript {
             """;
 
     /**
-     * KEYS[1]=slot:stock:{id}，ARGV[1]=张数；返回回补后的余量。
+     * KEYS[1]=slot:stock:{id}，ARGV[1]=张数；返回回补后的余量，key 不在时返回 {@link #KEY_MISSING}。
      *
-     * <p>先判 key 在不在：不在就返回 {@link #KEY_MISSING} 交给调用方按 DB 重算，
-     * 免得给一个已经没人读的老时段凭空建 key。
+     * <p>先判 key 在不在：不在就什么都不做 —— DB 才是这笔回补的准，下次扣减会按 DB 重建余量，
+     * 没必要（也不应该）给一个已经没人读的老时段凭空建 key。
      */
     public static final String REBACK = """
             if redis.call('EXISTS', KEYS[1]) == 0 then

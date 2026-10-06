@@ -31,7 +31,8 @@ public interface StockService {
     /**
      * 回补库存（取消、超时关单、下单失败的补偿）。
      *
-     * <p>调用方要是先改了库再调它：key 不在时这里按 DB 重算，DB 是准的结论才算数。
+     * <p>调用方要是先改了库再调它。Redis 里没有这个 key 时直接跳过：DB 才是准的，
+     * 下次扣减会按 DB 重建余量，不给没人读的老时段留孤儿 key。
      */
     void reback(Long slotId, int quantity);
 }

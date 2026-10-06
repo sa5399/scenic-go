@@ -99,12 +99,9 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public void reback(Long slotId, int quantity) {
-        String key = RedisConstants.SLOT_STOCK_KEY + slotId;
-        Long result = stringRedisTemplate.execute(REBACK_SCRIPT, List.of(key), String.valueOf(quantity));
-        if (result != null && result == StockScript.KEY_MISSING) {
-            // key 不在：按 DB 重算（调用方已改完库），不去凭空建一个只加 N 的 key
-            rebuildFromDb(slotId);
-        }
+        // key 不在时脚本直接跳过：DB 已经改完，下次扣减会按 DB 重建余量
+        stringRedisTemplate.execute(REBACK_SCRIPT,
+                List.of(RedisConstants.SLOT_STOCK_KEY + slotId), String.valueOf(quantity));
     }
 
     private Long executeDeduct(Long slotId, int quantity) {

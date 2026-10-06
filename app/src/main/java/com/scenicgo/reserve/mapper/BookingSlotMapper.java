@@ -18,4 +18,7 @@ public interface BookingSlotMapper extends BaseMapper<BookingSlot> {
 
     /** 记账：已售 +quantity；会超过总库存时不更新（返回 0），与表上的 CHECK 形成双保险 */
     int increaseSoldStock(@Param("slotId") Long slotId, @Param("quantity") int quantity);
+
+    /** 记账：已售 -quantity；扣成负数时不更新（返回 0） */
+    int decreaseSoldStock(@Param("slotId") Long slotId, @Param("quantity") int quantity);
 }

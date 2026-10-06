@@ -14,6 +14,9 @@ public class ReserveConstants {
     /** 随机后缀的取值上界（8 位数字），撞号由 uk_order_no / uk_checkin_code 兜底 */
     public static final int RANDOM_BOUND = 100_000_000;
 
+    /** 超时关单一次最多处理多少张单，避免积压时一把捞太多 */
+    public static final int TIMEOUT_BATCH_SIZE = 200;
+
     private ReserveConstants() {
     }
 }
