@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scenicgo.reserve.mapper.CheckinLogMapper">
+
+    <select id="selectLogPage" resultType="com.scenicgo.reserve.vo.CheckinLogVO">
+        SELECT l.id, l.order_no, l.user_id, l.spot_id, s.name AS spot_name,
+               l.operator_id, l.channel, l.checkin_time
+        FROM checkin_log l
+                 JOIN spot s ON s.id = l.spot_id
+        <where>
+            <if test="spotId != null">
+                AND l.spot_id = #{spotId}
+            </if>
+            <if test="startDate != null">
+                AND l.checkin_time &gt;= #{startDate}
+            </if>
+            <if test="endDateExclusive != null">
+                AND l.checkin_time &lt; #{endDateExclusive}
+            </if>
+        </where>
+        ORDER BY l.checkin_time DESC, l.id DESC
+    </select>
+</mapper>

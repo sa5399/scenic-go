@@ -2,6 +2,7 @@ package com.scenicgo.reserve.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.scenicgo.reserve.dto.CheckinTarget;
 import com.scenicgo.reserve.entity.Reserve;
 import com.scenicgo.reserve.vo.ReserveVO;
 import org.apache.ibatis.annotations.Param;
@@ -21,4 +22,7 @@ public interface ReserveMapper extends BaseMapper<Reserve> {
 
     /** 待支付且已超时的单，只取关单回补要用的列 */
     List<Reserve> selectExpiredOrders(@Param("deadline") LocalDateTime deadline, @Param("limit") int limit);
+
+    /** 核销用：按核销码查目标单（带景点名），一次查全判状态与写流水要的字段 */
+    CheckinTarget selectCheckinTarget(@Param("checkinCode") String checkinCode);
 }

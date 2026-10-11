@@ -30,4 +30,12 @@
           AND create_time &lt; #{deadline}
         LIMIT #{limit}
     </select>
+
+    <select id="selectCheckinTarget" resultType="com.scenicgo.reserve.dto.CheckinTarget">
+        SELECT r.id, r.status, r.order_no, r.user_id, r.spot_id, r.quantity,
+               s.name AS spot_name
+        FROM reserve r
+                 JOIN spot s ON s.id = r.spot_id
+        WHERE r.checkin_code = #{checkinCode}
+    </select>
 </mapper>
