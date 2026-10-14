@@ -1,6 +1,7 @@
 package com.scenicgo.reserve.service;
 
 import com.scenicgo.common.result.PageResult;
+import com.scenicgo.reserve.dto.ReserveBrief;
 import com.scenicgo.reserve.dto.ReserveFormDTO;
 import com.scenicgo.reserve.dto.ReserveQuery;
 import com.scenicgo.reserve.vo.ReserveCreateVO;
@@ -30,4 +31,12 @@ public interface ReserveService {
      * @return 本次关掉的单数
      */
     int closeExpiredOrders();
+
+    /**
+     * 取自己的、已核销的单（跨模块用，比如发表评价时做校验）。
+     *
+     * <p>不存在 → 404；不是自己的 → 403；还没核销 → 500。状态语义留在 reserve 模块，
+     * 别的模块不必依赖 {@code ReserveStatusEnum}。
+     */
+    ReserveBrief getMineCheckedIn(Long reserveId);
 }

@@ -22,4 +22,7 @@ public class RedisConstants {
 
     /** 库存 key 缺失时重建用 */
     public static final String LOCK_SLOT_KEY = "lock:slot:";
+
+    /** 评价点赞去重，Set 的成员是 userId；review.liked 只是它的计数快照 */
+    public static final String REVIEW_LIKED_KEY = "review:liked:";
 }

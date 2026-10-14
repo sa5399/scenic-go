@@ -10,6 +10,7 @@ import com.scenicgo.common.result.ResultCode;
 import com.scenicgo.reserve.constant.ReserveConstants;
 import com.scenicgo.reserve.constant.ReserveStatusEnum;
 import com.scenicgo.reserve.constant.SlotStatusEnum;
+import com.scenicgo.reserve.dto.ReserveBrief;
 import com.scenicgo.reserve.dto.ReserveFormDTO;
 import com.scenicgo.reserve.dto.ReserveQuery;
 import com.scenicgo.reserve.entity.BookingSlot;
@@ -26,6 +27,7 @@ import com.scenicgo.reserve.vo.ReserveVO;
 import com.scenicgo.utils.UserHolder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -208,6 +210,25 @@ public class ReserveServiceImpl implements ReserveService {
             throw new BizException(ResultCode.FORBIDDEN, "没有权限操作该订单");
         }
         return reserve;
+    }
+
+    @Override
+    public ReserveBrief getMineCheckedIn(Long reserveId) {
+        Reserve reserve = reserveMapper.selectOne(new LambdaQueryWrapper<Reserve>()
+                .eq(Reserve::getId, reserveId)
+                .select(Reserve::getId, Reserve::getSpotId, Reserve::getUserId, Reserve::getStatus));
+        if (reserve == null) {
+            throw new BizException(ResultCode.NOT_FOUND, "订单不存在");
+        }
+        if (!reserve.getUserId().equals(UserHolder.get().getId())) {
+            throw new BizException(ResultCode.FORBIDDEN, "没有权限操作该订单");
+        }
+        if (!ReserveStatusEnum.CHECKED_IN.getCode().equals(reserve.getStatus())) {
+            throw new BizException("订单还没核销，不能关联评价");
+        }
+        ReserveBrief brief = new ReserveBrief();
+        BeanUtils.copyProperties(reserve, brief);
+        return brief;
     }
 
     /** 时段信息是下单当时的快照，库存表以后改了也不影响已下单的这张单 */
