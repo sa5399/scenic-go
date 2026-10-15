@@ -47,7 +47,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Long create(ReviewFormDTO form) {
-        // 评分不校验的话，avg_score / negative_ratio（阶段 6.4 的输入）会被一条 0 分或 99 分污染，
+        // 评分不校验的话，平均分这类统计会被一条 0 分或 99 分污染，
         // 这里破例拦一道，别的入参仍然按"后端不写校验分支"走
         if (form.getScore() < 1 || form.getScore() > 5) {
             throw new BizException(ResultCode.BAD_REQUEST, "评分只能是 1~5");

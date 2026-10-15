@@ -26,7 +26,7 @@ public class Exhibition {
 
     private String summary;
 
-    /** 讲解词，TEXT，AI 语料 */
+    /** 讲解词，TEXT，列表查询不带 */
     private String narrative;
 
     private String coverImg;

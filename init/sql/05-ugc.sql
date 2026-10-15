@@ -65,7 +65,7 @@ INSERT INTO review (spot_id, user_id, content, score, liked, create_time) VALUES
 (12, 5, '竹编和拓印都值得试，建议预留一小时。',                                     4, 12, DATE_SUB(NOW(), INTERVAL 3 DAY)),
 (12, 6, '体验项目要提前预约，现场去经常排不上。',                                   3, 7,  DATE_SUB(NOW(), INTERVAL 6 DAY));
 
--- review_summary 故意留空：这张表由 AI 摘要任务生成，不造数据
+-- review_summary 是预留表：第一版不生成、不读取，所以故意留空、不造数据
 
 -- 自检
 SELECT '用户数' AS 检查项, COUNT(*) AS 结果 FROM user

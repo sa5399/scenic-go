@@ -8,7 +8,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * 评价。{@code content} 也是以后 AI 摘要的语料。
+ * 评价。
  */
 @Data
 @TableName("review")

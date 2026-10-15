@@ -1,4 +1,4 @@
-package com.scenicgo.ai.dto;
+package com.scenicgo.guide.dto;
 
 import lombok.Data;
 

@@ -59,7 +59,7 @@ INSERT INTO spot (id, name, summary, content, cover_img, longitude, latitude, op
      '/img/spot/12.jpg', 120.151900, 30.250400, '09:30-17:30', 6000, 4.6, 280, 0, 60, 0, 1);
 
 -- ---------------------------------------------------------------------
--- 展品（narrative 是 AI 讲解的 RAG 语料，写得具体一点，便于向量检索）
+-- 展品（narrative 是讲解词，写得具体一点，展品详情 / 语音导览直接用）
 -- ---------------------------------------------------------------------
 INSERT INTO exhibition (id, spot_id, name, category, summary, narrative, cover_img, sort, status) VALUES
 (1,  9, '宋人《云栖春晓图》',   '书画', '绢本设色，描绘湖山春晓',

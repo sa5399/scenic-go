@@ -24,7 +24,7 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("游小景 · 景区分时预约与电子导览系统")
-                        .description("分时预约 / 电子导览 / AI 场景推荐 —— 接口文档")
+                        .description("分时预约 / 电子导览 —— 接口文档")
                         .version("v1"))
                 .components(new Components().addSecuritySchemes(BEARER_AUTH, new SecurityScheme()
                         .type(SecurityScheme.Type.HTTP)

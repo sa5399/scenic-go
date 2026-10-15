@@ -53,18 +53,6 @@
             <artifactId>spring-security-crypto</artifactId>
         </dependency>
 
-        <!-- AI：暂时注释。要接 RAG 时取消注释，并启用 ai 包 -->
-        <!--
-        <dependency>
-            <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-starter-model-openai</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-starter-vector-store-redis</artifactId>
-        </dependency>
-        -->
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

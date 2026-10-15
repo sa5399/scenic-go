@@ -75,7 +75,7 @@ CREATE TABLE `exhibition` (
     `name`          VARCHAR(64)  NOT NULL                COMMENT '展品名称',
     `category`      VARCHAR(32)  NOT NULL DEFAULT ''     COMMENT '类别，如 陶瓷/书画/青铜',
     `summary`       VARCHAR(255) NOT NULL DEFAULT ''     COMMENT '简介',
-    `narrative`     TEXT                                 COMMENT '讲解词（RAG 语料，用于向量化）',
+    `narrative`     TEXT                                 COMMENT '讲解词（展品详情 / 语音导览用）',
     `cover_img`     VARCHAR(255) NOT NULL DEFAULT ''     COMMENT '图片',
     `sort`          INT          NOT NULL DEFAULT 0      COMMENT '馆内排序',
     `status`        TINYINT      NOT NULL DEFAULT 1      COMMENT '1上架 0下架',
@@ -237,7 +237,7 @@ CREATE TABLE `review` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '评价';
 
 -- ---------------------------------------------------------------------
--- 11. review_summary  AI 评价摘要（卖点4 的落地表）
+-- 11. review_summary  评价摘要（预留表：第一版不生成、不读取，只留结构）
 -- ---------------------------------------------------------------------
 DROP TABLE IF EXISTS `review_summary`;
 CREATE TABLE `review_summary` (

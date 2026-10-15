@@ -1,4 +1,4 @@
-package com.scenicgo.ai.dto;
+package com.scenicgo.guide.dto;
 
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * 路线推荐入参。
  */
 @Data
-public class AiRouteFormDTO {
+public class RouteFormDTO {
 
     /** 想要的标签名，如 ["室内", "日落"]；不传表示不限 */
     private List<String> tags;

@@ -41,11 +41,6 @@ mybatis-plus:
     db-config:
       id-type: auto
 
-# 业务开关
-app:
-  ai:
-    enabled: false
-
 springdoc:
   api-docs:
     path: /v3/api-docs

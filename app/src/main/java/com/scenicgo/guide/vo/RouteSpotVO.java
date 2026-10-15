@@ -1,4 +1,4 @@
-package com.scenicgo.ai.vo;
+package com.scenicgo.guide.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +17,6 @@ public class RouteSpotVO {
     /** 建议游览时长（分钟） */
     private Integer walkMinutes;
 
-    /** 为什么排它（命中标签、上一站步行多久），由规则拼出来，不是模型生成 */
+    /** 为什么排它（命中标签、上一站步行多久），由规则拼出来 */
     private String reason;
 }
