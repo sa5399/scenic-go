@@ -29,7 +29,6 @@
         <mybatis-plus.version>3.5.17</mybatis-plus.version>
         <redisson.version>4.7.0</redisson.version>
         <springdoc.version>2.9.1</springdoc.version>
-        <spring-ai.version>1.1.8</spring-ai.version>
     </properties>
 
     <!-- 只锁版本，不引入依赖（子模块自己声明需要的） -->
@@ -62,15 +61,6 @@
                 <groupId>org.springdoc</groupId>
                 <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
                 <version>${springdoc.version}</version>
-            </dependency>
-
-            <!-- AI 相关版本统一由 Spring AI BOM 管理；app 里按需开启依赖 -->
-            <dependency>
-                <groupId>org.springframework.ai</groupId>
-                <artifactId>spring-ai-bom</artifactId>
-                <version>${spring-ai.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
