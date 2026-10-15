@@ -226,7 +226,7 @@ CREATE TABLE `review` (
     `spot_id`     BIGINT      NOT NULL                COMMENT '景点 ID',
     `user_id`     BIGINT      NOT NULL                COMMENT '用户 ID',
     `reserve_id`  BIGINT      NOT NULL DEFAULT 0      COMMENT '关联预约单，0 表示未预约也能评',
-    `content`     TEXT                                COMMENT '评价内容（RAG 语料）',
+    `content`     TEXT                                COMMENT '评价内容',
     `score`       TINYINT     NOT NULL DEFAULT 5      COMMENT '评分 1-5',
     `liked`       INT         NOT NULL DEFAULT 0      COMMENT '点赞数（Redis Set 去重后回写）',
     `status`      TINYINT     NOT NULL DEFAULT 1      COMMENT '1显示 0隐藏',

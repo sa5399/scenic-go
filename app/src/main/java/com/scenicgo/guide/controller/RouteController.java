@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 推荐路线接口。
  *
- * <p>纯规则：标签 + 人群 + 时间预算 + 步行时长，不依赖任何模型服务。
+ * <p>纯规则：标签 + 人群 + 时间预算 + 步行时长
  */
 @Tag(name = "推荐路线", description = "按标签 / 人群 / 时间预算出路线")
 @RestController

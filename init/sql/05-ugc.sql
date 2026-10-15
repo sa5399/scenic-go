@@ -30,7 +30,7 @@ INSERT INTO `user` (id, username, password, nick_name, icon, phone, email, role,
 
 -- ---------------------------------------------------------------------
 -- 评价：31 条，覆盖 12 个景点/展馆，含 3 条 1-2 分差评
---   （差评是故意留的：AI 评价摘要要能聚类出「问题标签」）
+--   （差评是故意留的：方便看低分评价与平均分统计）
 -- ---------------------------------------------------------------------
 INSERT INTO review (spot_id, user_id, content, score, liked, create_time) VALUES
 (1,  4, '观景台的日落真的值，17:00 上去刚好，湖面被染成橘色。',                     5, 32, DATE_SUB(NOW(), INTERVAL 2 DAY)),

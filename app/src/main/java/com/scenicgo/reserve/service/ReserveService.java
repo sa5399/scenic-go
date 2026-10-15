@@ -35,7 +35,7 @@ public interface ReserveService {
     /**
      * 取自己的、已核销的单（跨模块用，比如发表评价时做校验）。
      *
-     * <p>不存在 → 404；不是自己的 → 403；还没核销 → 500。状态语义留在 reserve 模块，
+     * <p>不存在 → 404；不是自己的 → 403；还没核销 → 500。状态判断留在 reserve 模块，
      * 别的模块不必依赖 {@code ReserveStatusEnum}。
      */
     ReserveBrief getMineCheckedIn(Long reserveId);

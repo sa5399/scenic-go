@@ -34,7 +34,7 @@ import java.util.Set;
  *   <li><b>预算</b>：按「该点游览时长 + 上一站走过来的时长」累加，放不下就跳过（后面可能有更短的）</li>
  * </ol>
  *
- * <p>{@code reason} 是把命中的标签与步行时长拼出来的，不编造理由。
+ * <p>{@code reason} 只由命中的标签与步行时长拼成。
  */
 @Service
 @RequiredArgsConstructor

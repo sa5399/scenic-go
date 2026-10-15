@@ -5,7 +5,7 @@ import lombok.Getter;
 /**
  * 人群 → 对应的人群标签名（tag.type = 2）。
  *
- * <p>路线推荐用它把「带娃」这类输入折算成一个标签，靠查表而不是靠模型。
+ * <p>路线推荐用它把「带娃」这类输入折算成一个标签，靠查表：`family` → 亲子。
  */
 @Getter
 public enum CrowdEnum {

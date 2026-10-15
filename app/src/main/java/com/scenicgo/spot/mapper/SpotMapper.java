@@ -15,7 +15,7 @@ public interface SpotMapper extends BaseMapper<Spot> {
     /**
      * 景点列表：关键字、类型、标签三个条件都可选。
      *
-     * <p>标签是「全部命中」语义（同时带上这些标签的景点才返回），
+     * <p>标签是「全部命中」规则（同时带上这些标签的景点才返回），
      * tagCount 就是 tagIds 的个数，由调用方传进来供 HAVING 比较。
      */
     IPage<Spot> selectSpotPage(IPage<Spot> page,

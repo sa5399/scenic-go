@@ -22,8 +22,7 @@ services:
       retries: 10
 
   redis:
-    # Redis 8 已内置 Query Engine（RediSearch），向量检索直接用官方镜像，
-    # 不需要 redis/redis-stack-server（8.0 起 Redis Stack 已废弃）
+    # 缓存 / 库存 / GEO / 点赞去重都用官方 redis:8.4 镜像即可
     image: redis:8.4
     container_name: scenic-redis
     restart: unless-stopped
