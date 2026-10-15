@@ -4,6 +4,7 @@ import com.scenicgo.common.exception.BizException;
 import com.scenicgo.common.result.Result;
 import com.scenicgo.common.result.ResultCode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -37,6 +38,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({MethodArgumentTypeMismatchException.class, MissingServletRequestParameterException.class})
     public Result<Void> handleBadRequest(Exception e) {
         log.warn("参数异常: {}", e.getMessage());
+        return Result.fail(ResultCode.BAD_REQUEST);
+    }
+
+    /**
+     * 请求体不是合法 JSON（比如少了引号）：算"参数不合法"。
+     *
+     * <p>它是 {@code HttpMessageConversionException}，既不实现 {@link ErrorResponse}，
+     * 也不在上面几个类型里，不单独接住就会掉进兜底变成 500。
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public Result<Void> handleNotReadable(HttpMessageNotReadableException e) {
+        log.warn("请求体解析失败: {}", e.getMessage());
         return Result.fail(ResultCode.BAD_REQUEST);
     }
 
