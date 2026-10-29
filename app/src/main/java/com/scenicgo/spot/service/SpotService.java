@@ -20,4 +20,7 @@ public interface SpotService {
 
     /** 景点下的展品，按馆内排序 */
     List<ExhibitionVO> listExhibitions(Long spotId);
+
+    /** 上下架（管理端）：1 上架 0 下架；改库后删详情缓存 */
+    void updateStatus(Long id, Integer status);
 }

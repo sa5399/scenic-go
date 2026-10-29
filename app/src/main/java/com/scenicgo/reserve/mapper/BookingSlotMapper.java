@@ -21,4 +21,7 @@ public interface BookingSlotMapper extends BaseMapper<BookingSlot> {
 
     /** 记账：已售 -quantity；扣成负数时不更新（返回 0） */
     int decreaseSoldStock(@Param("slotId") Long slotId, @Param("quantity") int quantity);
+
+    /** 管理端调整总库存；调到比已售还少时不更新（返回 0） */
+    int updateTotalStock(@Param("slotId") Long slotId, @Param("totalStock") int totalStock);
 }

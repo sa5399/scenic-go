@@ -35,4 +35,12 @@ public interface StockService {
      * 下次扣减会按 DB 重建余量，不给没人读的老时段留孤儿 key。
      */
     void reback(Long slotId, int quantity);
+
+    /**
+     * 调整总库存（管理端）：先改库，再按更新后的账本刷新 Redis 余量。
+     *
+     * <p>新总数不能小于已售；更新语句带 {@code sold_stock <= total_stock} 条件，
+     * 与表上的 CHECK 一起兜住"把库存调到比已售还少"。
+     */
+    void adjustTotalStock(Long slotId, int newTotal);
 }

@@ -1,6 +1,7 @@
 package com.scenicgo.spot.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scenicgo.common.exception.BizException;
@@ -71,5 +72,20 @@ public class SpotServiceImpl implements SpotService {
                         Exhibition::getCategory, Exhibition::getSummary,
                         Exhibition::getCoverImg, Exhibition::getSort));
         return exhibitions.stream().map(ExhibitionVO::of).toList();
+    }
+
+    @Override
+    public void updateStatus(Long id, Integer status) {
+        if (!SpotStatusEnum.ON_SALE.getCode().equals(status) && !SpotStatusEnum.OFF_SALE.getCode().equals(status)) {
+            throw new BizException(ResultCode.BAD_REQUEST, "状态只能是 0 或 1");
+        }
+        if (spotMapper.selectById(id) == null) {
+            throw new BizException(ResultCode.NOT_FOUND, "景点不存在");
+        }
+        spotMapper.update(null, new LambdaUpdateWrapper<Spot>()
+                .eq(Spot::getId, id)
+                .set(Spot::getStatus, status));
+        // Cache-Aside：先改库再删缓存，下次读自动重建
+        spotCacheService.evict(id);
     }
 }

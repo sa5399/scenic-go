@@ -109,6 +109,24 @@ public class StockServiceImpl implements StockService {
                 List.of(RedisConstants.SLOT_STOCK_KEY + slotId), String.valueOf(quantity));
     }
 
+    @Override
+    public void adjustTotalStock(Long slotId, int newTotal) {
+        BookingSlot slot = bookingSlotMapper.selectById(slotId);
+        if (slot == null) {
+            throw new BizException(ResultCode.NOT_FOUND, "时段不存在");
+        }
+        if (newTotal < slot.getSoldStock()) {
+            throw new BizException("总库存不能小于已售 " + slot.getSoldStock() + " 张");
+        }
+        if (bookingSlotMapper.updateTotalStock(slotId, newTotal) == 0) {
+            throw new BizException("库存调整失败，请重试");
+        }
+        // Redis 只存余量：按更新后的账本重算，不用旧 sold_stock 自己减
+        BookingSlot updated = bookingSlotMapper.selectById(slotId);
+        stringRedisTemplate.opsForValue().set(RedisConstants.SLOT_STOCK_KEY + slotId,
+                String.valueOf(updated.getTotalStock() - updated.getSoldStock()));
+    }
+
     /**
      * 按 DB 重算余量写回 Redis（total_stock - sold_stock）。
      *

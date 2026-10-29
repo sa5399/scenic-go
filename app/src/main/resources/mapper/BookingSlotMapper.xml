@@ -36,4 +36,11 @@
         WHERE id = #{slotId}
           AND sold_stock &gt;= #{quantity}
     </update>
+
+    <update id="updateTotalStock">
+        UPDATE booking_slot
+        SET total_stock = #{totalStock}
+        WHERE id = #{slotId}
+          AND sold_stock &lt;= #{totalStock}
+    </update>
 </mapper>

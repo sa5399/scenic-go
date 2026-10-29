@@ -123,6 +123,11 @@ public class SpotCacheServiceImpl implements SpotCacheService {
         });
     }
 
+    @Override
+    public void evict(Long id) {
+        stringRedisTemplate.delete(RedisConstants.CACHE_SPOT_KEY + id);
+    }
+
     /** 一次把详情要用的数据查全：景点不存在就返回 null（下面按空值缓存） */
     private SpotDetail loadFromDb(Long id) {
         Spot spot = spotMapper.selectById(id);
