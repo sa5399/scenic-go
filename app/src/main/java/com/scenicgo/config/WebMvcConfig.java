@@ -27,6 +27,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
             "/tags", "/tags/**",
             "/facilities", "/facilities/**",
             "/guide", "/guide/**",
+            "/announcements",
             "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**",
             "/error"
     };
