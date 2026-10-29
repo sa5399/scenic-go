@@ -43,6 +43,12 @@ public class ReviewController {
         return Result.ok(reviewService.listBySpot(id, query));
     }
 
+    @Operation(summary = "我的评价（分页，按时间倒序）")
+    @GetMapping("/reviews")
+    public Result<PageResult<ReviewVO>> listMine(@ParameterObject ReviewQuery query) {
+        return Result.ok(reviewService.listMine(query));
+    }
+
     @Operation(summary = "点赞 / 取消点赞")
     @PostMapping("/reviews/{id}/like")
     public Result<ReviewLikeVO> like(@PathVariable Long id) {

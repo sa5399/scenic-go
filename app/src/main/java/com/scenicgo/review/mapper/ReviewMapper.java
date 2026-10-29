@@ -10,4 +10,7 @@ public interface ReviewMapper extends BaseMapper<Review> {
 
     /** 某景点的评价分页，带昵称与头像，按时间倒序 */
     IPage<ReviewVO> selectReviewPage(IPage<ReviewVO> page, @Param("spotId") Long spotId);
+
+    /** 我的评价分页，带景点名，按时间倒序 */
+    IPage<ReviewVO> selectMyReviewPage(IPage<ReviewVO> page, @Param("userId") Long userId);
 }

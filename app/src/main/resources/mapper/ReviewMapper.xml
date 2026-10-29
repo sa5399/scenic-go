@@ -11,4 +11,14 @@
           AND r.status = 1
         ORDER BY r.create_time DESC, r.id DESC
     </select>
+
+    <select id="selectMyReviewPage" resultType="com.scenicgo.review.vo.ReviewVO">
+        SELECT r.id, r.spot_id, s.name AS spot_name, r.user_id,
+               r.content, r.score, r.liked, r.create_time
+        FROM review r
+                 JOIN spot s ON s.id = r.spot_id
+        WHERE r.user_id = #{userId}
+          AND r.status = 1
+        ORDER BY r.create_time DESC, r.id DESC
+    </select>
 </mapper>

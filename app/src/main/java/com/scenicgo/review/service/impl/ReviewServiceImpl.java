@@ -83,6 +83,13 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public PageResult<ReviewVO> listMine(ReviewQuery query) {
+        IPage<ReviewVO> page = reviewMapper.selectMyReviewPage(
+                Page.of(query.getCurrent(), query.getSize()), UserHolder.get().getId());
+        return PageResult.of(page);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public ReviewLikeVO toggleLike(Long reviewId) {
         Review review = reviewMapper.selectOne(new LambdaQueryWrapper<Review>()

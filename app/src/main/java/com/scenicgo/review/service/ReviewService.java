@@ -14,6 +14,9 @@ public interface ReviewService {
     /** 某景点的评价分页（按时间倒序） */
     PageResult<ReviewVO> listBySpot(Long spotId, ReviewQuery query);
 
+    /** 我的评价分页（按时间倒序），只返回当前登录用户的 */
+    PageResult<ReviewVO> listMine(ReviewQuery query);
+
     /** 点赞 / 取消点赞：Redis Set 去重，同一用户重复点不会重复计数 */
     ReviewLikeVO toggleLike(Long reviewId);
 }

@@ -12,6 +12,11 @@ public class ReviewVO {
 
     private Long id;
 
+    /** 以下两个字段只有「我的评价」会填：景点页列表的调用方本来就已知景点 */
+    private Long spotId;
+
+    private String spotName;
+
     private Long userId;
 
     private String nickName;
