@@ -1,6 +1,7 @@
 -- =====================================================================
 -- 04-slot.sql  时段库存造数
 --   维度：景点 × 日期 × 时段 × 票种（未来 7 天，含今天）
+--   票价：免费景点（avg_price = 0）与园区票一律 0 元；收费景点成人票 = 人均价，儿童 / 学生半价
 --   行数：12 个景点 × 7 天 × 4 时段 × 3 票种 = 1008 行
 -- 依赖：01-schema.sql、02-dict.sql（sys_slot_template / sys_ticket_type）、03-scenic.sql
 -- 幂等：只清理「今天及以后」的库存行，历史行（被预约单引用）不动
@@ -20,8 +21,12 @@ SELECT s.id,
        t.slot_start,
        t.slot_end,
        tt.code,
-       tt.price,
-       t.total_stock,
+       CASE
+           WHEN s.avg_price = 0 THEN 0                         -- 免费景点与园区票 0 元
+           WHEN tt.code = 1 THEN s.avg_price                   -- 成人票 = 景点人均价
+           ELSE ROUND(s.avg_price * 0.5, 0)                    -- 儿童 / 学生半价
+       END,
+       CASE WHEN s.type = 2 THEN 2000 ELSE t.total_stock END,   -- 园区票每时段 2000 人
        0,
        1
 FROM spot s
@@ -35,6 +40,7 @@ FROM spot s
          CROSS JOIN sys_slot_template t
          CROSS JOIN sys_ticket_type tt
 WHERE s.status = 1
+  AND (s.type = 2 OR s.avg_price > 0)   -- 只为可预约对象造库存：园区票 + 收费项目
 ORDER BY s.id, n.n, t.sort, tt.code;
 
 -- 自检：行数应为 1008，且每个景点每天每个时段都有三种票
