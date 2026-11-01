@@ -10,6 +10,7 @@
             JOIN spot_tag st ON st.spot_id = s.id
         </if>
         WHERE s.status = 1
+        AND s.type != 2
         <if test="type != null">
             AND s.type = #{type}
         </if>

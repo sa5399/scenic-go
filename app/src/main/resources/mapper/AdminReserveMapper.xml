@@ -16,6 +16,12 @@
             <if test="status != null">
                 AND r.status = #{status}
             </if>
+            <if test="startDate != null">
+                AND r.create_time &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND r.create_time &lt; DATE_ADD(#{endDate}, INTERVAL 1 DAY)
+            </if>
         </where>
         ORDER BY r.create_time DESC, r.id DESC
     </select>

@@ -2,7 +2,9 @@ package com.scenicgo.spot.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.scenicgo.common.exception.BizException;
+import com.scenicgo.common.result.PageResult;
 import com.scenicgo.common.result.ResultCode;
 import com.scenicgo.spot.dto.AnnouncementFormDTO;
 import com.scenicgo.spot.entity.Announcement;
@@ -64,6 +66,22 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         announcementMapper.update(null, new LambdaUpdateWrapper<Announcement>()
                 .eq(Announcement::getId, id)
                 .set(Announcement::getStatus, status));
+    }
+
+    @Override
+    public PageResult<AnnouncementVO> listAllPage(int current, int size, Integer status) {
+        Page<Announcement> page = announcementMapper.selectPage(Page.of(current, size),
+                new LambdaQueryWrapper<Announcement>()
+                        .eq(status != null, Announcement::getStatus, status)
+                        .orderByDesc(Announcement::getCreateTime)
+                        .orderByDesc(Announcement::getId));
+        return PageResult.of(page.convert(AnnouncementVO::of));
+    }
+
+    @Override
+    public void delete(Long id) {
+        getExisting(id);
+        announcementMapper.deleteById(id);
     }
 
     private Announcement getExisting(Long id) {

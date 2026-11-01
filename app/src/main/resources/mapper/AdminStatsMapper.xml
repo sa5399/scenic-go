@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.scenicgo.admin.mapper.AdminStatsMapper">
+
+    <select id="countStats" resultType="com.scenicgo.admin.vo.AdminStatsVO">
+        SELECT
+            (SELECT COUNT(*) FROM spot WHERE status = 1 AND type != 2) AS spot_on_sale,
+            (SELECT COUNT(*) FROM spot WHERE status = 0 AND type != 2) AS spot_offline,
+            (SELECT COUNT(*) FROM checkin_log) AS checkin_total,
+            (SELECT COUNT(*) FROM checkin_log WHERE checkin_time &gt;= #{todayStart}) AS checkin_today,
+            (SELECT COUNT(*) FROM reserve WHERE status = 0) AS reserve_pending
+    </select>
+</mapper>

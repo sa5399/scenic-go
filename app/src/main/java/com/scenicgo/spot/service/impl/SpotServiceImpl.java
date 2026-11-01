@@ -10,10 +10,13 @@ import com.scenicgo.common.result.ResultCode;
 import com.scenicgo.spot.constant.SpotStatusEnum;
 import com.scenicgo.spot.dto.SpotDetail;
 import com.scenicgo.spot.dto.SpotQuery;
+import com.scenicgo.spot.dto.SpotUpdateDTO;
 import com.scenicgo.spot.entity.Exhibition;
 import com.scenicgo.spot.entity.Spot;
+import com.scenicgo.spot.entity.Tag;
 import com.scenicgo.spot.mapper.ExhibitionMapper;
 import com.scenicgo.spot.mapper.SpotMapper;
+import com.scenicgo.spot.mapper.TagMapper;
 import com.scenicgo.spot.service.SpotCacheService;
 import com.scenicgo.spot.service.SpotService;
 import com.scenicgo.spot.vo.ExhibitionVO;
@@ -21,6 +24,7 @@ import com.scenicgo.spot.vo.SpotVO;
 import com.scenicgo.spot.vo.TagVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -35,6 +39,8 @@ public class SpotServiceImpl implements SpotService {
 
     private final ExhibitionMapper exhibitionMapper;
 
+    private final TagMapper tagMapper;
+
     private final SpotCacheService spotCacheService;
 
     @Override
@@ -47,6 +53,62 @@ public class SpotServiceImpl implements SpotService {
                 tagIds,
                 tagIds == null ? 0 : tagIds.size());
         return PageResult.of(page.convert(SpotVO::of));
+    }
+
+    @Override
+    public PageResult<SpotVO> listForAdmin(String keyword, Integer type, Integer status, int current, int size) {
+        LambdaQueryWrapper<Spot> wrapper = new LambdaQueryWrapper<Spot>()
+                .select(Spot::getId, Spot::getName, Spot::getSummary, Spot::getCoverImg,
+                        Spot::getLongitude, Spot::getLatitude, Spot::getOpenTime, Spot::getAvgPrice,
+                        Spot::getScore, Spot::getSoldCount, Spot::getRecommendOrder,
+                        Spot::getWalkMinutes, Spot::getType, Spot::getStatus)
+                .eq(type != null, Spot::getType, type)
+                .eq(status != null, Spot::getStatus, status)
+                .orderByDesc(Spot::getSoldCount)
+                .orderByDesc(Spot::getScore)
+                .orderByDesc(Spot::getId);
+        if (StringUtils.hasText(keyword)) {
+            wrapper.and(w -> w.like(Spot::getName, keyword).or().like(Spot::getSummary, keyword));
+        }
+        IPage<Spot> page = spotMapper.selectPage(Page.of(current, size), wrapper);
+        return PageResult.of(page.convert(SpotVO::of));
+    }
+
+    @Override
+    public void updateForAdmin(Long id, SpotUpdateDTO dto) {
+        if (spotMapper.selectById(id) == null) {
+            throw new BizException(ResultCode.NOT_FOUND, "景点不存在");
+        }
+        if (dto.getName() == null || dto.getName().isBlank()
+                || dto.getSummary() == null || dto.getSummary().isBlank()) {
+            throw new BizException(ResultCode.BAD_REQUEST, "名称和简介不能为空");
+        }
+        int avgPrice = dto.getAvgPrice() == null ? 0 : dto.getAvgPrice();
+        if (avgPrice < 0) {
+            throw new BizException(ResultCode.BAD_REQUEST, "价格不能为负数");
+        }
+        spotMapper.update(null, new LambdaUpdateWrapper<Spot>()
+                .eq(Spot::getId, id)
+                .set(Spot::getName, dto.getName().trim())
+                .set(Spot::getSummary, dto.getSummary().trim())
+                .set(Spot::getAvgPrice, avgPrice));
+        // 免费 / 收费状态变化时同步"免费"标签，保证标签筛选与价格一致
+        syncFreeTag(id, avgPrice == 0);
+        // Cache-Aside：先改库再删详情缓存，游客端下次读自动重建
+        spotCacheService.evict(id);
+    }
+
+    /** 免费（价格 0）与"免费"标签永远成对出现，避免标签筛选和实际价格脱节 */
+    private void syncFreeTag(Long spotId, boolean free) {
+        Tag freeTag = tagMapper.selectOne(new LambdaQueryWrapper<Tag>().eq(Tag::getName, "免费"));
+        if (freeTag == null) {
+            return;
+        }
+        if (free) {
+            tagMapper.insertSpotTag(spotId, freeTag.getId());
+        } else {
+            tagMapper.deleteSpotTag(spotId, freeTag.getId());
+        }
     }
 
     @Override

@@ -33,6 +33,9 @@ public class SpotVO {
     /** 1 景点 0 展馆 */
     private Integer type;
 
+    /** 1 上架 0 下架（管理端列表用） */
+    private Integer status;
+
     /** 景点挂的标签，只有详情接口会填 */
     private List<TagVO> tags;
 

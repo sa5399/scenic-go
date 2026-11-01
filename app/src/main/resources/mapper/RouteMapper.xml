@@ -9,6 +9,7 @@
                  LEFT JOIN spot_tag st ON st.spot_id = s.id
                  LEFT JOIN tag t ON t.id = st.tag_id
         WHERE s.status = 1
+          AND s.type != 2
         ORDER BY s.recommend_order, s.id
     </select>
 </mapper>
