@@ -244,8 +244,15 @@ public class ReserveServiceImpl implements ReserveService {
         reserve.setTicketType(slot.getTicketType());
         reserve.setQuantity(quantity);
         reserve.setUnitPrice(slot.getPrice());
-        reserve.setTotalAmount(slot.getPrice() * quantity);
-        reserve.setStatus(ReserveStatusEnum.PENDING.getCode());
+        int totalAmount = slot.getPrice() * quantity;
+        reserve.setTotalAmount(totalAmount);
+        // 0 元单（免费景点 / 园区票）无需支付：提交即出票，直接生成核销码
+        if (totalAmount == 0) {
+            reserve.setStatus(ReserveStatusEnum.BOOKED.getCode());
+            reserve.setCheckinCode(generateCheckinCode());
+        } else {
+            reserve.setStatus(ReserveStatusEnum.PENDING.getCode());
+        }
         return reserve;
     }
 
