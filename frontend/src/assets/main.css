@@ -1,0 +1,21 @@
+@import '../styles/tokens.css';
+
+/* 基础 reset 与正文字体；视觉令牌统一在 styles/tokens.css */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--sg-font-body);
+  color: var(--sg-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 页面大标题统一衬线（登录/注册等 h1；其它具名标题在组件内引用 display 字体变量） */
+h1 {
+  font-family: var(--sg-font-display);
+  letter-spacing: 0.02em;
+}

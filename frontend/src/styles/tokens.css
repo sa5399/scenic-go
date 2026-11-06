@@ -1,0 +1,59 @@
+/**
+ * 湖青主题设计令牌 —— 全站唯一的视觉事实来源
+ *
+ * 方向（从题材推导）：
+ * - 主色「湖青」：云栖湖水面与越窑青瓷的青绿，沉静不艳
+ * - 点缀「日落橘」：观景台日落机位的暖色，只用于评分/价格等语义强调，不做装饰
+ * - 标题衬线（宋体系）呼应江南文气，正文保持系统无衬线保证易读
+ * - 卡片大圆角、克制留白；动效保持 Vant/Element 默认，不额外叠加
+ *
+ * 约定：组件里不得再写死颜色/圆角，换肤只改这份文件。
+ */
+:root {
+  /* 品牌色 */
+  --sg-primary: #2e7d6d; /* 湖青 */
+  --sg-primary-deep: #235e52; /* 按压/加深态 */
+  --sg-primary-weak: rgba(46, 125, 109, 0.12); /* 选中底色（chips / 标签） */
+  --sg-primary-tint: rgba(46, 125, 109, 0.06); /* 更弱的选中底（行选中） */
+  --sg-primary-border: rgba(46, 125, 109, 0.45); /* 强调描边（核销码卡） */
+  --sg-accent: #e0863c; /* 日落橘：评分 / 价格 / 倒计时 */
+
+  /* 中性色 */
+  --sg-text: #2a322e;
+  --sg-text-secondary: #6f7b75;
+  --sg-bg: #f2f5f3;
+  --sg-surface: #ffffff;
+  --sg-fill: #eff2f0; /* 弱底：chips、时段行、加载占位 */
+  --sg-danger: #ee0a24;
+
+  /* 投影（全站统一：卡片用 shadow，浮层卡片用 pop，底部栏用 bar 上投影） */
+  --sg-shadow: 0 4px 16px rgba(35, 94, 82, 0.06);
+  --sg-shadow-pop: 0 10px 32px rgba(35, 94, 82, 0.1);
+  --sg-shadow-bar: 0 -2px 12px rgba(35, 94, 82, 0.06);
+
+  /* 字体 */
+  --sg-font-body:
+    -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei',
+    sans-serif;
+  --sg-font-display: 'Noto Serif SC', 'Source Han Serif SC', 'STZhongsong', 'SimSun', serif;
+
+  /* 圆角与封面占位 */
+  --sg-radius: 14px;
+  --sg-cover-gradient: linear-gradient(135deg, #dfebe7, #bfd8d1);
+}
+
+/*
+ * Vant / Element Plus 主题归一到湖青。
+ * 用 html:root（特异性高于组件库的 :root）保证无论样式注入顺序如何都生效。
+ */
+html:root {
+  --van-primary-color: var(--sg-primary);
+
+  --el-color-primary: var(--sg-primary);
+  --el-color-primary-light-3: #5a9a8e;
+  --el-color-primary-light-5: #8ab5ac;
+  --el-color-primary-light-7: #bcd4ce;
+  --el-color-primary-light-8: #d5e4e0;
+  --el-color-primary-light-9: #e9f1ef;
+  --el-color-primary-dark-2: var(--sg-primary-deep);
+}
