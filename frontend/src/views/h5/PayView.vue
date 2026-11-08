@@ -3,7 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { ReserveItem } from '@/types/api'
 import { cancelReserve, getReserve, payReserve } from '@/api/reserve'
-import { fen2yuan, formatTime } from '@/utils/format'
+import { fen2yuan, formatTime, reserveStatusText } from '@/utils/format'
 import { showConfirmDialog, showToast } from '@/utils/h5ui'
 
 /** 支付收银台：15 分钟倒计时 + 模拟支付 / 取消订单 */
@@ -126,7 +126,7 @@ onBeforeUnmount(() => {
         </van-empty>
       </template>
       <div v-else class="card state-note">
-        订单当前状态：{{ item.status === 1 ? '已支付，待入园' : '已支付，待入园' }} ·
+        订单当前状态：{{ reserveStatusText[item.status] }} ·
         支付时间 {{ formatTime(item.payTime) }}
         <van-button round type="primary" size="small" class="state-btn" :to="`/reserves/${orderNo}`">
           查看核销码
