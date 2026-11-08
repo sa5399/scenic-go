@@ -45,8 +45,9 @@ router.beforeEach((to) => {
     return { path: loginPath, query: { redirect: to.fullPath } }
   }
 
-  // 角色要求取整条匹配链上所有声明（布局级声明对全部子页生效）
-  const roles = to.matched.flatMap((record) => record.meta.roles ?? [])
+  // 角色要求取 to.meta（vue-router 4 中子级 meta 覆盖父级）：布局级 [2,3] 管整体准入，
+  // 子页可单独收紧到 [3]。不能取匹配链并集——父级角色会稀释子页收紧，导致越权放行
+  const roles = to.meta.roles ?? []
   if (roles.length > 0 && !auth.hasRole(roles)) {
     return { name: to.path.startsWith('/admin') ? 'admin-forbidden' : 'forbidden' }
   }
