@@ -13,7 +13,6 @@ const loading = ref(false)
 const switchingId = ref(0)
 
 const statusOptions = [
-  { label: '全部', value: undefined },
   { label: '上架中', value: 1 as const },
   { label: '已下架', value: 0 as const },
 ]
@@ -43,13 +42,6 @@ async function load(current = 1) {
   }
 }
 
-function pickStatus(value: 0 | 1 | undefined) {
-  if (status.value === value) {
-    return
-  }
-  status.value = value
-  load(1)
-}
 
 async function onToggle(spot: Spot) {
   const next: 0 | 1 = spot.status === 1 ? 0 : 1
@@ -108,7 +100,7 @@ onMounted(() => load(1))
         <el-input v-model="keyword" placeholder="景点名称 / 简介" clearable style="width: 220px" @keyup.enter="load(1)" />
       </el-form-item>
       <el-form-item label="状态">
-        <el-select :model-value="status" style="width: 120px" @change="pickStatus">
+        <el-select v-model="status" placeholder="全部" clearable style="width: 120px" @change="load(1)">
           <el-option v-for="o in statusOptions" :key="o.label" :label="o.label" :value="o.value" />
         </el-select>
       </el-form-item>
